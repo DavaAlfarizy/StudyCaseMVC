@@ -27,34 +27,50 @@
 </tr>
 </thead>
 <tbody>
-<?php $no=1; ?>
-<?php foreach ($data ['barang'] as $row ) :?>
-<tr>
-<td><?= $no; ?></td>
-<td><?= $row['nama_peminjam']; ?></td>
-<td><?= $row ['jenis_barang']; ?></td>
-<td><?= $row['no_barang']; ?></td>
-<td><?= $row['tgl_pinjam']; ?></td> 
-<td><?= $row['tgl_kembali']; ?></td>
-<td>
-            <?php if ($row['status'] == 'Sudah Kembali') {
-            echo '<div class="btn btn-success text-white">Sudah Kembali</div>';
+<?php
+$no = 1; ?>
+
+<?php date_default_timezone_set("asia/jakarta"); 
+            $currentDate = date('Y-m-d H:i:s'); 
+    ?>
+<?php  foreach ($data['barang'] as $row) :
+    $tglKembali = $row['tgl_kembali'];
+    $status = ($tglKembali < $currentDate) ? 'Sudah Kembali' : $row['status'];
+    ?>
+
+    <tr>
+        <td><?= $no; ?></td>
+        <td><?= $row['nama_peminjam']; ?></td>
+        <td><?= $row['jenis_barang']; ?></td>
+        <td><?= $row['no_barang']; ?></td>
+        <td><?= $row['tgl_pinjam']; ?></td>
+        <td><?= $tglKembali; ?></td>
+        <td>
+            <?php
+            if ($status ==  'Sudah Kembali') {
+                echo '<div class="btn btn-success text-white">Sudah Kembali</div>';
             } else {
-            echo '<div class="btn btn-danger text-white">Belum Kembali</div>';
+                echo '<div class="btn btn-danger text-white">Belum Kembali</div>';
             }
             ?>
         </td>
         <td>
-            <?php if ($row['status'] == 'Sudah Kembali') : ?>
-            <a href="<?= BASE_URL ?>/barang/hapus/<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Hapus data?');">
-            <i class=>Hapus</i></a>
+            <?php if ($status == 'Sudah Kembali') : ?>
+                <a href="<?= BASE_URL ?>/barang/hapus/<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Hapus data?');">
+                    <i class=>Hapus</i>
+                </a>
             <?php else : ?>
-            <a href="<?= BASE_URL ?>/barang/edit/<?= $row['id'] ?>" class="btn btn-primary"><i class=></i>Edit</a>
-            <a href="<?= BASE_URL ?>/barang/hapus/<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Hapus data?');"><i class=>Hapus</i></a>
+                <a href="<?= BASE_URL ?>/barang/edit/<?= $row['id'] ?>" class="btn btn-primary"><i class=></i>Edit</a>
+                <a href="<?= BASE_URL ?>/barang/hapus/<?= $row['id'] ?>" class="btn btn-danger" onclick="return confirm('Hapus data?');">
+                    <i class=>Hapus</i>
+                </a>
             <?php endif; ?>
         </td>
-        </tr>
-    <?php $no++;endforeach; ?>
+    </tr>
+<?php
+    $no++; endforeach;
+?>
+
 </tbody>
 </table>
 </div>
